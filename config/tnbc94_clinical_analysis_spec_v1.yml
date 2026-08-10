@@ -1,0 +1,58 @@
+version: 1
+freeze_date: "2026-07-21"
+freeze_status: "frozen_before_TNBC94_score_outcome_join"
+cohort: "Zenodo_14204217_ST_TNBC"
+statistical_unit: "patient"
+sample_size: 94
+
+expression_input:
+  file: "data/raw/spatial/tnbc_zenodo_14204217/PB_count.RDS"
+  transformation: "log1p counts per 1 million"
+  program_source: "config/locked_macrophage_programs_v1.yml"
+
+exposure:
+  p4_residual_model: "P4_primary ~ macrophage_identity + hypoxia + log1p(library_size)"
+  fibrovascular_score: "mean of z(fibroblast_ecm) and z(endothelial_angiogenic)"
+  ecosystem_score: "mean of z(P4 residual) and z(fibrovascular score), then standardized"
+  direction: "higher is hypothesized to indicate greater distant-relapse risk"
+  cutpoint: "none for inference; median split allowed only for descriptive visualization"
+
+primary_model:
+  endpoint: "distant relapse-free survival (DRFS)"
+  model: "Cox proportional hazards"
+  exposure: "continuous ecosystem score per standard deviation"
+  covariates:
+    - "age at diagnosis per 10 years"
+    - "T stage as ordinal 1-4"
+    - "N stage as ordinal 0-2"
+  alternative: "two-sided"
+  alpha: 0.05
+  report:
+    - "hazard ratio and 95% confidence interval"
+    - "likelihood-ratio P value"
+    - "change in Harrell concordance relative to the covariate-only model"
+    - "Schoenfeld residual proportional-hazards test"
+
+secondary_endpoints:
+  - "invasive disease-free survival (iDFS)"
+  - "overall survival (OS)"
+  multiplicity: "Benjamini-Hochberg across the two adjusted exposure tests"
+
+specificity_controls:
+  - "P4 residual alone"
+  - "fibrovascular score alone"
+  - "macrophage identity"
+  - "hypoxia"
+  multiplicity: "Benjamini-Hochberg across control tests"
+
+robustness:
+  - "unadjusted Cox model"
+  - "leave-one-P4-gene-out ecosystem scores"
+  - "report event counts and complete-case sample size"
+  - "no outcome-derived threshold or feature selection"
+
+claim_boundary: >-
+  A survival association would support prognostic relevance of the expression
+  ecosystem but not demonstrate that the spatial niche causes relapse. A null
+  result will be retained and will prevent a prognostic claim.
+

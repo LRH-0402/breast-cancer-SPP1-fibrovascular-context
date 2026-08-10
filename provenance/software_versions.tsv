@@ -1,0 +1,31 @@
+environment	component	declared_version	manifest_builder_version
+manifest_runtime	python	3.12.13	3.12.13
+manifest_runtime	platform	macOS-26.5.2-arm64-arm-64bit	macOS-26.5.2-arm64-arm-64bit
+analysis_python	anndata	0.11.4	0.11.4
+analysis_python	h5py	3.13.0	3.13.0
+analysis_python	matplotlib	3.10.3	3.10.3
+analysis_python	numpy	2.2.6	2.2.6
+analysis_python	pandas	2.2.3	2.2.3
+analysis_python	PyYAML	6.0.2	6.0.2
+analysis_python	scanpy	1.11.1	1.11.1
+analysis_python	scikit-learn	1.5.2	1.5.2
+analysis_python	scipy	1.15.3	1.15.3
+analysis_python	seaborn	0.13.2	0.13.2
+analysis_python	statsmodels	0.14.6	0.14.6
+analysis_python	Pillow	12.3.0	12.3.0
+manuscript_python	openpyxl	3.1.5	not installed in manifest-building environment
+manuscript_python	python-docx	1.2.0	not installed in manifest-building environment
+manuscript_python	pypdf	6.10.0	not installed in manifest-building environment
+manuscript_python	reportlab	4.4.9	not installed in manifest-building environment
+manuscript_python	Pillow	12.3.0	12.3.0
+manuscript_python	PyYAML	6.0.2	6.0.2
+analysis_R	R	4.5.3	not queried for R
+analysis_R	Matrix	1.7-4	not queried for R
+analysis_R	Seurat	5.4.0	not queried for R
+analysis_R	SeuratObject	5.3.0	not queried for R
+analysis_R	data.table	1.18.2.1	not queried for R
+analysis_R	ggplot2	4.0.2	not queried for R
+analysis_R	NMF	0.28	not queried for R
+analysis_R	patchwork	1.3.2	not queried for R
+analysis_R	survival	3.8-6	not queried for R
+analysis_R	yaml	2.3.12	not queried for R

@@ -1,0 +1,19 @@
+project_seed: 20260721
+primary_disease_setting: TNBC
+discovery_dataset: GSE176078
+macrophage_label:
+  column: celltype_minor
+  value: Macrophage
+program_discovery:
+  variable_features: 1500
+  pilot_features: 1000
+  pilot_ranks: [4, 5, 6, 7, 8]
+  pilot_nrun: 5
+  top_genes_per_program: 50
+quality_control:
+  retain_author_qc_for_initial_feasibility: true
+  minimum_macrophages_per_patient_for_patient_score: 20
+multiple_testing:
+  method: BH
+  alpha: 0.05
+

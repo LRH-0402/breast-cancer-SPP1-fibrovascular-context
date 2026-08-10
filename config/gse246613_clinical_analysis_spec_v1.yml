@@ -1,0 +1,55 @@
+version: 1
+freeze_date: "2026-07-21"
+freeze_status: "frozen_before_score_outcome_join"
+blinded_score_table: "results/tables/GSE246613_locked_program_by_patient_timepoint_blinded.tsv"
+blinded_score_table_sha256: "4012b49d7775ebeb2f24d87a7d29da49e658ce673f40cccb031d40738dc12096"
+statistical_unit: "patient"
+
+primary_analysis:
+  population: "patients with a baseline biopsy and non-missing pCR"
+  outcome: "pCR, encoded R=1 and NR=0"
+  predictor: "baseline median P4_primary score in fixed macrophage-like clusters"
+  scaling: "z score across eligible baseline patients"
+  model: "binomial logistic regression with intercept"
+  primary_test: "likelihood-ratio test against intercept-only model"
+  effect: "odds ratio per 1 SD with Wald 95% confidence interval"
+  alpha: 0.05
+  missing_data: "complete case; no imputation"
+
+robustness:
+  - "two-sided label permutation test for ROC AUC with seed 20260721 and 10000 permutations"
+  - "patient bootstrap 95% interval for AUC with seed 20260721 and 5000 stratified resamples"
+  - "Mann-Whitney rank test as a distribution-free sensitivity analysis"
+  - "leave-one-gene-out P4 scores without choosing the best omission"
+
+prespecified_one_at_a_time_adjustments:
+  - "macrophage_identity"
+  - "hypoxia"
+  - "macrophage_like_fraction_of_immune"
+  - "median_n_counts"
+
+negative_control_predictors:
+  - "P1_inflammatory"
+  - "P6_interferon"
+  - "P3_secondary"
+  - "macrophage_identity"
+  - "phagolysosome"
+  - "hypoxia"
+  - "macrophage_like_fraction_of_immune"
+
+secondary_longitudinal_analysis:
+  score: "P4_primary"
+  contrasts:
+    - "PD1 minus Base within patient"
+    - "RTPD1 minus PD1 within patient"
+    - "RTPD1 minus Base within patient"
+  tests:
+    - "paired Wilcoxon signed-rank test for overall changes"
+    - "Mann-Whitney test comparing patient change scores between R and NR"
+  multiplicity: "Benjamini-Hochberg across secondary longitudinal tests"
+
+prohibitions:
+  - "no gene, cluster, timepoint, or cutoff selection based on pCR or RCB"
+  - "no cell-level inferential tests for patient outcomes"
+  - "no claim of prediction without external validation"
+  - "no causal interpretation of treatment-associated score changes"

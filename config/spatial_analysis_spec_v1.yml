@@ -1,0 +1,112 @@
+version: 1
+freeze_date: "2026-07-21"
+freeze_status: "frozen_before_spatial_program_scoring"
+discovery_cohort: "Zenodo_4739739_Wu_Visium"
+validation_cohorts:
+  - "Figshare_21591429"
+  - "Zenodo_14204217_ST_TNBC"
+statistical_unit: "patient"
+
+spot_filter:
+  minimum_detected_genes: 200
+  exclude_pathology_labels_containing:
+    - "Artefact"
+
+frozen_program:
+  source: "config/locked_macrophage_programs_v1.yml"
+  primary: "P4_primary"
+  secondary: "P3_secondary"
+
+spatial_signatures:
+  fibroblast_ecm:
+    - COL1A1
+    - COL1A2
+    - COL3A1
+    - COL5A1
+    - COL5A2
+    - DCN
+    - LUM
+    - C7
+    - CTHRC1
+    - FAP
+    - POSTN
+    - THY1
+  endothelial_angiogenic:
+    - PECAM1
+    - VWF
+    - EMCN
+    - KDR
+    - ESAM
+    - ENG
+    - PLVAP
+    - ACKR1
+    - RGCC
+    - CA4
+  malignant_epithelial:
+    - EPCAM
+    - KRT8
+    - KRT18
+    - KRT19
+    - KRT17
+    - KRT5
+    - KRT14
+    - TACSTD2
+  cd8_cytotoxic:
+    - CD3D
+    - CD3E
+    - CD8A
+    - CD8B
+    - NKG7
+    - GNLY
+    - GZMB
+    - PRF1
+  treg:
+    - FOXP3
+    - IL2RA
+    - CTLA4
+    - TIGIT
+    - IKZF2
+
+primary_test:
+  exposure: "top within-patient quartile of P4 residual"
+  p4_residual_model: "P4_primary ~ macrophage_identity + hypoxia + log1p(total_UMI)"
+  target: "mean of within-patient z-scored fibroblast_ecm and endothelial_angiogenic scores"
+  neighborhood: "six nearest Visium spots by array coordinates, excluding self"
+  effect: "difference in mean neighbor target between high-P4 and remaining spots"
+  alternative: "greater"
+  permutations: 2000
+  permutation_scheme: >-
+    Shuffle P4 residuals within patient and pathology label; pathology strata
+    with fewer than 20 spots are pooled as RARE. Recompute the within-patient
+    top quartile after every permutation. Coordinates and target values remain fixed.
+  cohort_combination: "mean patient effect compared with the mean of synchronized patient null draws"
+  alpha: 0.05
+
+secondary_tests:
+  targets:
+    - "fibroblast_ecm"
+    - "endothelial_angiogenic"
+    - "malignant_epithelial"
+    - "cd8_cytotoxic"
+    - "treg"
+  multiplicity: "Benjamini-Hochberg"
+
+validation_rules:
+  - "same frozen gene lists and top-quartile definition"
+  - "no re-estimation of gene weights or direction"
+  - "patient/section effects reported separately before pooling"
+  - "spot-level significance cannot be presented as patient-level evidence"
+  - "Visium adjacency is a neighborhood association, not direct cell contact"
+  - >-
+    when pathology labels are unavailable, use within-section malignant-epithelial
+    score quintiles as the locked composition-preserving permutation strata;
+    quintiles with fewer than 20 spots are pooled as RARE
+  - >-
+    for the 94-patient TNBC array cohort, analyze the single pathologist-annotated
+    array per patient, assign each spot its largest pixel-fraction annotation,
+    exclude dominant Artefacts, and use those dominant labels as permutation strata
+
+claim_boundary: >-
+  A positive result supports recurrent spatial organization of expression
+  programs. It does not prove that macrophages produce every P4 transcript,
+  that the implicated cells directly interact, or that P4 causes the niche.

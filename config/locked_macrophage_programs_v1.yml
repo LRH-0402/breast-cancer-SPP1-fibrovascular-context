@@ -1,0 +1,67 @@
+version: 1
+lock_date: "2026-07-21"
+lock_status: "frozen_before_clinical_outcome_analysis"
+source_table: "results/tables/locked_macrophage_program_core_genes_v1.tsv"
+source_table_sha256: "ddfc4daf1d171022292c46d7c439e3225e81dae04991c754be5c172c1587789a"
+discovery_cohort: "GSE176078"
+independent_matching_cohorts:
+  - "GSE161529"
+  - "GSE246613_baseline"
+  - "GSE114725"
+locking_rule: >-
+  Gene belongs to the discovery top-50 factor and to the matched top-50
+  factor in at least two of three independent cohorts. Clinical outcomes
+  were not used for discovery, matching, or locking.
+
+primary_program:
+  id: "P4"
+  working_name: "SPP1-matrix-lipid macrophage axis"
+  genes:
+    - CD36
+    - CD52
+    - FABP5
+    - FBP1
+    - FN1
+    - HMOX1
+    - LYZ
+    - MARCO
+    - MT2A
+    - NUPR1
+    - S100A8
+    - SPP1
+    - TIMP1
+
+secondary_program:
+  id: "P3"
+  working_name: "lysosomal-lipid-associated macrophage axis"
+  genes:
+    - ACP5
+    - CCL18
+    - CXCL9
+    - FN1
+    - HMOX1
+    - IFI27
+    - LYZ
+    - NUPR1
+
+predefined_negative_controls:
+  biological:
+    - "P1 inflammatory/IL1-chemokine program"
+    - "P6 interferon/CXCL9-CXCL10 program"
+    - "generic hypoxia program"
+    - "generic macrophage identity and macrophage abundance"
+  technical:
+    - "library size and detected genes"
+    - "patient and dataset effects"
+    - "gene-set-size- and expression-matched random signatures"
+    - "leave-one-gene-out scoring"
+
+allowed_primary_uses_after_lock:
+  - "spatial localization and neighborhood tests"
+  - "longitudinal treatment dynamics"
+  - "patient-level clinical association"
+  - "bulk-cohort projection"
+
+claim_boundary: >-
+  The lock establishes cross-cohort recurrence of expression programs, not
+  lipid flux, lineage, directionality, spatial interaction, or causality.
