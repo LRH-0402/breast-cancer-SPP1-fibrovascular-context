@@ -69,5 +69,4 @@ and DOI will be added when the repository release is deposited.
 
 ## License
 
-No reuse license has yet been selected. Copyright remains with the authors until
-a license file is added.
+This repository is released under the MIT License. See `LICENSE`.
